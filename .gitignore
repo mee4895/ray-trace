@@ -1,0 +1,8 @@
+# binary folder
+bin/
+
+# output folder
+out/
+
+# vscode settings
+.vscode
