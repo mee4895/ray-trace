@@ -25,6 +25,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(OUTDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OUTEXT)))
 all: $(BINDIR)/$(TARGET)
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
+	mkdir -p $(BINDIR)
 	$(LD) $(LDFLAGS) $^ $(LIB) -o $@
 
 $(OUTDIR)/%.$(OUTEXT): $(SRCDIR)/%.$(SRCEXT)
