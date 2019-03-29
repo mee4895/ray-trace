@@ -4,5 +4,8 @@ bin/
 # output folder
 out/
 
+# output file
+output.bmp
+
 # vscode settings
 .vscode
