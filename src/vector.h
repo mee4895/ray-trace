@@ -2,6 +2,7 @@
 #define VECTOR_H
 
 #include <exception>
+#include <cmath>
 
 class vec2l
 {
@@ -194,24 +195,70 @@ class vec3f
 			}
 		}
 
-		vec3f operator* (const float factor) const
+		vec3f operator* (const float other) const
 		{
-			return vec3f(this->x * factor, this->y * factor, this->z * factor);
+			return vec3f(this->x * other, this->y * other, this->z * other);
 		}
 
-		float operator* (const vec3f vector) const
+		float operator* (const vec3f other) const
 		{
-			return (this->x * vector.x) + (this->y * vector.y) + (this->z * vector.z);
+			return (this->x * other.x) + (this->y * other.y) + (this->z * other.z);
 		}
 
-		vec3f operator+ (const vec3f vector) const
+		vec3f operator+ (const vec3f other) const
 		{
-			return vec3f(this->x + vector.x, this->y + vector.y, this->z + vector.z);
+			return vec3f(this->x + other.x, this->y + other.y, this->z + other.z);
 		}
 
-		vec3f operator- (const vec3f vector) const
+		void operator+= (const vec3f other)
 		{
-			return vec3f(this->x - vector.x, this->y - vector.y, this->z - vector.z);
+			this->x += other.x;
+			this->y += other.y;
+			this->z += other.z;
+		}
+
+		vec3f operator- (const vec3f other) const
+		{
+			return vec3f(this->x - other.x, this->y - other.y, this->z - other.z);
+		}
+
+		void operator-= (const vec3f other)
+		{
+			this->x -= other.x;
+			this->y -= other.y;
+			this->z -= other.z;
+		}
+
+		bool operator== (const vec3f other) const
+		{
+			return (this->x == other.x) && (this->y == other.y) && (this->z == other.z);
+		}
+
+		bool operator!= (const vec3f other) const
+		{
+			return (this->x != other.x) || (this->y != other.y) || (this->z != other.z);
+		}
+
+		float length()
+		{
+			return sqrt((this->x * this->x) + (this->y * this->y) + (this->z * this->z));
+		}
+
+		void normalize()
+		{
+			float l = this->length();
+			this->x /= l;
+			this->y /= l;
+			this->z /= l;
+		}
+
+		static vec3f dot(const vec3f a, const vec3f b)
+		{
+			return vec3f(
+				(a.y * b.z) - (a.z * b.y),
+				(a.z * b.x) - (a.x * b.z),
+				(a.x * b.y) - (a.y * b.x)
+			);
 		}
 
 	protected:

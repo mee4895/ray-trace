@@ -1,6 +1,7 @@
 #include <iostream>
 #include "EasyBMP/EasyBMP.h"
 #include "vector.h"
+#include "camera.h"
 
 RGBApixel RGBA(const vec3f vector)
 {
