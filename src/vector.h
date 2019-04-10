@@ -1,7 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <exception>
+#include <stdexcept>
 #include <cmath>
 
 class vec2l
