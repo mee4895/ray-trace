@@ -9,27 +9,33 @@ class Camera
 		class iterator
 		{
 			public:
-				iterator() { }
-				iterator(vec3f base, vec3f u_min, vec3f u_step, vec3f u_max, vec3f v_min,
-						vec3f v_step, vec3f v_max) : u(u_min), v(v_min), base(base), u_min(u_min), u_step(u_step),
-						u_max(u_max), v_min(v_min), v_step(v_step), v_max(v_max) { }
+				iterator(int x, int y) : x(x), y(y), x_max(x), y_max(y), u(), v(),
+						base(), u_min(), v_min(), u_step(), v_step() { }
+				iterator(vec3f base, int x_max, int y_max, vec3f u_min, vec3f u_step,
+						vec3f v_min, vec3f v_step) : x(0), y(0), x_max(x_max),
+						y_max(y_max), u(u_min), v(v_min), base(base), u_min(u_min),
+						v_min(v_min), u_step(u_step), v_step(v_step) { }
 
 				iterator& operator++()
 				{
-					if (u == u_max)
+					if (x == x_max)
 					{
-						if (v == v_max)
+						if (y == y_max)
 						{
 							throw std::out_of_range("Can't advance iterator.");
 						}
 						else
 						{
+							x = 0;
+							y += 1;
+
 							u = u_min;
 							v += v_step;
 						}
 					}
 					else
 					{
+						x += 1;
 						u += u_step;
 					}
 
@@ -45,12 +51,12 @@ class Camera
 
 				bool operator==(const iterator other) const
 				{
-					return (this->u == other.u) && (this->v == other.v);
+					return (this->x == other.x) && (this->y == other.y);
 				}
 
 				bool operator!=(const iterator other) const
 				{
-					return (this->u != other.u) || (this->v != other.v);
+					return (this->x != other.x) || (this->y != other.y);
 				}
 
 				vec3f operator*() const
@@ -58,20 +64,34 @@ class Camera
 					return u + v - base;
 				}
 
+				int getX() const
+				{
+					return this->x;
+				}
+
+				int getY() const
+				{
+					return this->y;
+				}
+
 			protected:
 			private:
+				int x;
+				int y;
+
+				int x_max;
+				int y_max;
+
 				vec3f u;
 				vec3f v;
 
 				const vec3f base;
 
 				const vec3f u_min;
-				const vec3f u_step;
-				const vec3f u_max;
-
 				const vec3f v_min;
+
+				const vec3f u_step;
 				const vec3f v_step;
-				const vec3f v_max;
 		};
 
 		Camera(vec3f position, vec3f up, vec3f look_at, float d, float render_width,
@@ -93,21 +113,18 @@ class Camera
 		{
 			return iterator(
 				w * d,
+				width - 1,
+				height - 1,
 				u * (l + (r - l) * 0.5 / width),
 				u * ((r - l) / width),
-				u * (l + (r - l) * (width - 0.5) / width),
 				v * (t + (b - t) * 0.5 / height),
-				v * ((b - t) / height),
-				v * (t + (b - t) * (height - 0.5) / height)
+				v * ((b - t) / height)
 			);
 		}
 
 		iterator end()
 		{
-			vec3f u_max = u * (l + (r - l) * (width - 0.5) / width);
-			vec3f v_max = v * (t + (b - t) * (height - 0.5) / height);
-
-			return iterator(w * d, u_max, vec3f(), u_max, v_max, vec3f(), v_max);
+			return iterator(width - 1, height - 1);
 		}
 
 		vec3f getPos() const
