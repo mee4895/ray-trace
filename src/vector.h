@@ -306,6 +306,16 @@ class vec4f
 			}
 		}
 
+		vec4f operator* (const float other) const
+		{
+			return vec4f(this->x * other, this->y * other, this->z * other, this->d * other);
+		}
+
+		float operator* (const vec4f other) const
+		{
+			return (this->x * other.x) + (this->y * other.y) + (this->z * other.z) + (this->d * other.d);
+		}
+
 	protected:
 	private:
 };
